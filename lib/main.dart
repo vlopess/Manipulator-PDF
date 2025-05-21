@@ -1,8 +1,6 @@
 // ignore_for_file: use_super_parameters
 
-import 'dart:developer';
 import 'dart:typed_data';
-
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:my_start_app_teste/pdf_view.dart';
@@ -26,14 +24,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   int pageIndex = 1;
   Uint8List? image;
-  late List<Uint8List?> images;
+  late List<Uint8List> images;
   late final String pdfName;
 
   bool open = false;
 
   PdfImageRendererPdf? pdf;
   int? count;
-  PdfImageRendererPageSize? size;
+  PdfImageRendererPageSize? size  ;
 
   bool cropped = false;
 
@@ -151,7 +149,6 @@ class _MyAppState extends State<MyApp> {
                           });
                           await openPdf(path: result.paths[0]!);
                           count = await pdf!.getPageCount();
-                          log(count.toString());
                           for (var i = 0; i < count!; i++) {
                             size = await pdf!.getPageSize(pageIndex: i);
                             final imagePdf = await pdf!.renderPage(
@@ -163,10 +160,8 @@ class _MyAppState extends State<MyApp> {
                               scale: 3,
                               background: Colors.white,
                             );
-                            images.add(imagePdf);
+                            images.add(imagePdf!);
                           }
-                          //Navigator.push(context, MaterialPageRoute(builder: (context) => PdfView(images: images),));
-                          //await renderPage();
                         }
                       },
                   )
@@ -179,34 +174,7 @@ class _MyAppState extends State<MyApp> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => PdfView(images: images, pdfName: pdfName,),));
                       },
                   )
-                ),           
-                // if (open == true) ...[
-                //   Row(
-                //     mainAxisAlignment: MainAxisAlignment.center,
-                //     children: <Widget>[
-                //       TextButton.icon(
-                //         onPressed: pageIndex > 0
-                //             ? () async {
-                //                 pageIndex = 1;
-                //                 await renderPage();
-                //               }
-                //             : null,
-                //         icon: const Icon(Icons.chevron_left),
-                //         label: const Text('Previous'),
-                //       ),
-                //       TextButton.icon(
-                //         onPressed: pageIndex < (count! - 1)
-                //             ? () async {
-                //                 pageIndex = 1;
-                //                 await renderPage();
-                //               }
-                //             : null,
-                //         icon: const Icon(Icons.chevron_right),
-                //         label: const Text('Next'),
-                //       ),
-                //     ],
-                //   ),
-                // ]
+                ),   
               ],
             ),
           ),
@@ -214,75 +182,3 @@ class _MyAppState extends State<MyApp> {
       );
   }
 }
-
-
-
-
-// // ignore_for_file: no_leading_underscores_for_local_identifiers
-
-// import 'dart:math';
-
-// import 'package:flutter/material.dart';
-
-// void main() {
-//   runApp(const MyApp());
-// }
-
-// class MyApp extends StatelessWidget {
-//   const MyApp({super.key});
-
-//   // This widget is the root of your application.
-//   @override
-//   Widget build(BuildContext context) {
-//     return MaterialApp(
-//       debugShowCheckedModeBanner: false,
-//       theme: ThemeData(
-//         colorScheme: ColorScheme.fromSeed(seedColor: Colors.cyanAccent),
-//         useMaterial3: true,
-//       ),
-//       home: const MyHomePage(title: 'Teste PDF Manipulation'),
-//     );
-//   }
-// }
-
-// class MyHomePage extends StatefulWidget {
-//   const MyHomePage({super.key, required this.title});
-
-//   final String title;
-
-//   @override
-//   State<MyHomePage> createState() => _MyHomePageState();
-// }
-
-// class _MyHomePageState extends State<MyHomePage> {
-//     double _top = 0;
-//     double _left = 0;
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-//         title: Text(widget.title),
-//       ),
-//       body: Stack(
-//         children: [
-//           Positioned(
-//             top: _top,
-//             left: _left,
-//             child: GestureDetector(
-//               onPanUpdate: (details) {
-//                 _top = max(0, _top + details.delta.dy);
-//                 _left = max(0, _left + details.delta.dx);
-//                 setState(() {});
-//               },
-//               child: Image.network(
-//                 'https://www.techupdates.net/wp-content/uploads/2021/02/Flutter.png',
-//                 scale: 4
-//               ),
-//             )
-//           ),
-//         ],
-//       )
-//     );
-//   }
-// }
